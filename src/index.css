@@ -2,41 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Resonique Design System - Futuristic Musical Interface 
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Futuristic Background */
+    --background: 222 47% 4%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card System */
+    --card: 222 35% 8%;
+    --card-foreground: 210 40% 95%;
+    --card-hover: 222 35% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Interactive Elements */
+    --popover: 222 35% 8%;
+    --popover-foreground: 210 40% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand Colors - Musical Technology Theme */
+    --primary: 195 100% 50%;
+    --primary-foreground: 222 47% 4%;
+    --primary-glow: 195 100% 65%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Audio Frequency */
+    --secondary: 270 100% 70%;
+    --secondary-foreground: 222 47% 4%;
+    --secondary-glow: 270 100% 80%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted Elements */
+    --muted: 222 25% 15%;
+    --muted-foreground: 215 25% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Success/Match States */
+    --accent: 120 100% 50%;
+    --accent-foreground: 222 47% 4%;
 
-    --destructive: 0 84.2% 60.2%;
+    /* Status Colors */
+    --success: 120 100% 50%;
+    --success-foreground: 222 47% 4%;
+    --warning: 45 100% 60%;
+    --warning-foreground: 222 47% 4%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Interactive States */
+    --border: 222 25% 20%;
+    --input: 222 25% 15%;
+    --ring: 195 100% 50%;
 
-    --radius: 0.5rem;
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(195 100% 50%), hsl(270 100% 70%));
+    --gradient-card: linear-gradient(135deg, hsl(222 35% 8%), hsl(222 35% 12%));
+    --gradient-frequency: linear-gradient(90deg, hsl(195 100% 50%), hsl(270 100% 70%), hsl(45 100% 60%));
+
+    /* Shadows and Effects */
+    --shadow-glow: 0 0 30px hsl(195 100% 50% / 0.3);
+    --shadow-card: 0 8px 32px hsl(222 47% 4% / 0.4);
+    --shadow-frequency: 0 0 20px hsl(270 100% 70% / 0.5);
+
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -55,34 +81,15 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+  .light {
+    /* Light mode - keep same futuristic theme but lighter */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 4%;
+    --border: 214 32% 91%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -100,6 +107,38 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen;
+    background: linear-gradient(135deg, hsl(222 47% 4%), hsl(222 35% 8%));
+  }
+
+  /* Frequency Visualization Animation */
+  @keyframes frequency-pulse {
+    0%, 100% { transform: scaleY(0.3); opacity: 0.6; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px hsl(195 100% 50% / 0.3); }
+    50% { box-shadow: 0 0 40px hsl(195 100% 50% / 0.6); }
+  }
+
+  @keyframes marker-slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Utility Classes */
+  .frequency-bar {
+    @apply bg-gradient-to-t from-primary via-secondary to-warning;
+    animation: frequency-pulse 0.3s ease-in-out infinite;
+  }
+
+  .glow-effect {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  .card-glass {
+    @apply bg-card/80 backdrop-blur-sm;
+    box-shadow: var(--shadow-card);
   }
 }
