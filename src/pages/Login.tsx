@@ -1,26 +1,24 @@
-// src/pages/LoginPage.tsx
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
-const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const EnterPage = () => {
+  const [name, setName] = useState('');
   const [error, setError] = useState('');
-  const { login } = useAuth();
+  const { enterGame } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     try {
-      await login({ email, password });
+      await enterGame(name);
       navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to log in');
+      setError(err.response?.data?.message || 'Failed to enter game');
     }
   };
 
@@ -28,35 +26,18 @@ const LoginPage = () => {
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Enter your credentials to play.</CardDescription>
+          <CardTitle>Enter the Game</CardTitle>
+          <CardDescription>Enter your player name to begin.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full">Log In</Button>
-            <p className="text-center text-sm text-muted-foreground">
-              No account? <Link to="/register" className="text-primary hover:underline">Register here</Link>
-            </p>
+            <Input placeholder="Player Name" value={name} onChange={(e) => setName(e.target.value)} required />
+            {error && <p className="text-sm text-red-500">{error}</p>}
+            <Button type="submit" className="w-full">Play</Button>
           </form>
         </CardContent>
       </Card>
     </div>
   );
 };
-
-export default LoginPage;
+export default EnterPage;

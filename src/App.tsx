@@ -1,17 +1,15 @@
 import { Routes, Route } from 'react-router-dom';
-import { Toaster as Sonner } from '@/components/ui/sonner';
 import GamePage from './pages/Index';
-import LoginPage from './pages/Login';
-import RegisterPage from './pages/RegisterPage';
+import EnterPage from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoutes';
+import { Toaster as Sonner } from "@/components/ui/sonner";
 
 function App() {
   return (
     <>
       <Sonner />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<EnterPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<GamePage />} />
         </Route>

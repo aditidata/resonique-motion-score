@@ -1,13 +1,11 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import { loginUser, registerUser, authApi } from '../api';
+import { api } from '../api';
 
 interface Player { id: string; name: string; score: number; }
-interface UserProfile { id: string; email: string; role: string; player: Player | null; }
 interface AuthContextType {
-  user: UserProfile | null;
+  player: Player | null;
   token: string | null;
-  login: (credentials: any) => Promise<void>;
-  register: (details: any) => Promise<void>;
+  enterGame: (name: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -15,62 +13,35 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const [player, setPlayer] = useState<Player | null>(null);
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('authToken'));
   const [isLoading, setIsLoading] = useState(true);
 
- // ... inside AuthProvider
   useEffect(() => {
-    const storedUser = localStorage.getItem('authUser');
-    const storedToken = localStorage.getItem('authToken');
-
-    // Add this log to inspect the stored data
-    console.log("AuthContext: Loading user from localStorage...", JSON.parse(storedUser || '{}'));
-
-    if (storedToken && storedUser) {
-      setUser(JSON.parse(storedUser));
+    const storedPlayer = localStorage.getItem('authPlayer');
+    if (token && storedPlayer) {
+      setPlayer(JSON.parse(storedPlayer));
     }
     setIsLoading(false);
-  }, []); // This effect runs once on page load
-// ...
+  }, [token]);
 
-  const handleAuthSuccess = async (data: { token: string; user: UserProfile }) => {
-    let { token, user } = data;
+  const enterGame = async (name: string) => {
+    const { data } = await api.post('/enter', { name });
+    const { token, player } = data;
     localStorage.setItem('authToken', token);
-
-    if (!user.player) {
-      try {
-        const defaultName = user.email.split('@')[0];
-        const { data: newPlayer } = await authApi.post('/players', { name: defaultName });
-        user = { ...user, player: newPlayer };
-      } catch (error) {
-        console.error("Failed to auto-create player profile:", error);
-      }
-    }
-    
-    localStorage.setItem('authUser', JSON.stringify(user));
+    localStorage.setItem('authPlayer', JSON.stringify(player));
     setToken(token);
-    setUser(user);
-  };
-
-  const login = async (credentials: any) => {
-    const { data } = await loginUser(credentials);
-    await handleAuthSuccess(data);
-  };
-
-  const register = async (details: any) => {
-    const { data } = await registerUser(details);
-    await handleAuthSuccess(data);
+    setPlayer(player);
   };
 
   const logout = () => {
     localStorage.removeItem('authToken');
-    localStorage.removeItem('authUser');
+    localStorage.removeItem('authPlayer');
     setToken(null);
-    setUser(null);
+    setPlayer(null);
   };
 
-  const value = { user, token, login, register, logout, isLoading };
+  const value = { player, token, enterGame, logout, isLoading };
   
   return <AuthContext.Provider value={value}>{!isLoading && children}</AuthContext.Provider>;
 };
